@@ -4,6 +4,7 @@ let mensaje=null
 listarGeneros()
 
 
+
 function validarPelicula(){
     if (document.getElementById("txtCodigo").value==""){
         mensaje="Debe ingresar código de la Película"

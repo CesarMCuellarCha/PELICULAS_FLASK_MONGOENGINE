@@ -14,38 +14,10 @@ def inicio():
 
 def enviarCorreo(email=None, destinatario=None, asunto=None, mensaje=None):
     try:
-        email.send(to=destinatario, subject=asunto, contents=mensaje)
+        email.send(to=destinatario, subject=asunto, contents=mensaje,
+                    attachments=["./static/imagenes/film.jpg"])
     except Exception as error:
         print(str(error))
-
-@app.route("/iniciarSesion2/",  methods=['POST'])
-def iniciarSesion2():   
-    mensaje = ""       
-    if request.method=='POST':
-        try:          
-            username=request.form['txtUser']
-            password=request.form['txtPassword'] 
-            usuario = Usuario.objects(usuario=username,password=password).first()
-            if usuario:
-                session['user']=username
-                session['user_name']=f"{usuario.nombres} {usuario.apellidos}"
-                email = yagmail.SMTP("cesarmcuellar@gmail.com","zwakhypmhtqqdnqe", 
-                                     encoding="utf-8")
-                asunto = "Ingreso al Sistema"
-                mensaje = f"Cordial saludo {usuario.nombres} {usuario.apellidos}. \
-                           Bienvenido a nuestro aplicativo"
-                thread = threading.Thread(target=enviarCorreo,
-                                          args=(email, usuario.correo, asunto, mensaje))
-                thread.start()
-                return redirect("/home/")
-            else:
-                mensaje="Credenciales no válidas"
-        except Exception as error:
-            mensaje=str(error)
-    
-        return render_template("frmIniciarSesion.html", mensaje=mensaje)
-
-
 
 
 @app.route("/iniciarSesion/",  methods=['POST'])
@@ -69,7 +41,8 @@ def iniciarSesion():
                             Cordialmente,<br><br><br> \
                             <b>Administración<br>Aplicativo Gestión Películas.</b>"
                     thread = threading.Thread(target=enviarCorreo,
-                                            args=(email, [usuario.correo,"ccuellar@sena.edu.co"], asunto, [mensaje,"Manual.pdf"]))
+                                            args=(email, [usuario.correo,"ccuellar@sena.edu.co"], 
+                                                  asunto, [mensaje,"Manual.pdf","./static/imagenes/avatar.png"]))
                     thread.start()
                     return redirect("/home/")
                 else:
